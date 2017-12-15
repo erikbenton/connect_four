@@ -7,7 +7,36 @@ describe "ConnectFour" do
 
 	let(:empty_board) {Hash[(0..5).map { |row| [row, [".",".",".",".",".",".","."]]}]}
 	let(:full_board) {Hash[(0..5).map { |row| [row, ["O","O","O","O","O","O","O"]]}]}
+	let(:horizontal_win_board) {{0 => ["O", "O", "O", "X", "O", ".", "."],
+														   1 => ["O", "X", "O", "X", "O", ".", "."],
+														   2 => ["O", "O", "O", "O", "X", ".", "."],
+														   3 => [".", ".", ".", ".", ".", ".", "."],
+														   4 => [".", ".", ".", ".", ".", ".", "."],
+														   5 => [".", ".", ".", ".", ".", ".", "."]}}
+	
+	let(:vertical_win_board) {{0 => ["O", "O", "X", "X", "O", "O", "."],
+														 1 => ["O", "O", "X", "X", "O", "X", "."],
+														 2 => ["O", "O", "X", ".", "O", ".", "."],
+														 3 => ["X", "O", ".", ".", "X", ".", "."],
+														 4 => [".", ".", ".", ".", ".", ".", "."],
+														 5 => [".", ".", ".", ".", ".", ".", "."]}}
+	
+	let(:diagonal_r2l_win_board) {{0 => ["O", "X", "O", "X", "X", ".", "."],
+														 		 1 => ["O", "X", "X", "O", "O", ".", "."],
+														 		 2 => [".", ".", ".", "X", "O", ".", "."],
+														 		 3 => [".", ".", ".", ".", "X", ".", "."],
+														 		 4 => [".", ".", ".", ".", ".", ".", "."],
+														 		 5 => [".", ".", ".", ".", ".", ".", "."]}}
+	
+	let(:diagonal_l2r_win_board) {{0 => [".", ".", ".", "X", "O", "X", "O"],
+														 		 1 => [".", ".", ".", "O", "X", "O", "."],
+														 		 2 => [".", ".", ".", "X", "O", ".", "."],
+														 		 3 => [".", ".", ".", "O", ".", ".", "."],
+														 		 4 => [".", ".", ".", ".", ".", ".", "."],
+														 		 5 => [".", ".", ".", ".", ".", ".", "."]}}
+
 	let(:empty_board_string) {". . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n"}
+	let(:full_board_string) {"O O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\n"}
 
 	describe ".initialize" do
 		it "it sets up an empty board" do
@@ -76,17 +105,53 @@ describe "ConnectFour" do
 				expect(game.make_move(4)).to eql(false)
 			end
 		end
-
-		describe ".draw_board" do
-			context "given an empty board" do
-				it "returns a string of a empty board" do
-					game.board = empty_board
-					expect(game.draw_board).to eql(empty_board_string)
-				end
-			end
-
-		end
-
 	end
-		
+
+	describe ".draw_board" do
+		context "given an empty board" do
+			it "returns a string of an empty board" do
+				game.board = empty_board
+				expect(game.draw_board).to eql(empty_board_string)
+			end
+		end
+		context "given a full board" do
+			it "returns a string of a full board" do
+				game.board = full_board
+				expect(game.draw_board).to eql(full_board_string)
+			end
+		end
+	end
+
+	describe ".check_for_win" do
+		context "given an empty board" do
+			it "returns false" do
+				game.board = empty_board
+				expect(game.check_for_win).to eql(false)
+			end
+		end
+		context "given a board with four connected horizontally" do
+			it "returns true" do
+				game.board = horizontal_win_board
+				expect(game.check_for_win).to eql(true)
+			end
+		end
+		context "given a board with four connected vertically" do
+			it "returns true" do
+				game.board = vertical_win_board
+				expect(game.check_for_win).to eql(true)
+			end
+		end
+		context "given a board with four connected diagonally top left to right" do
+			it "returns true" do
+				game.board = diagonal_l2r_win_board
+				expect(game.check_for_win).to eql(true)
+			end
+		end
+		context "given a board with four connected diagonally top right to left" do
+			it "returns true" do
+				game.board = diagonal_r2l_win_board
+				expect(game.check_for_win).to eql(true)
+			end
+		end
+	end
 end

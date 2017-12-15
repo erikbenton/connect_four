@@ -3,7 +3,7 @@ class ConnectFour
 
 
 	def initialize
-		puts self.write_instructions
+		# puts self.write_instructions
 		@board = self.make_board
 
 	end
@@ -67,14 +67,57 @@ class ConnectFour
 
 
 	def check_for_win
+		(0..5).each do |y|
+			(0..6).each do |x|
+				next if board[y][x] == "."
+				if x + 3 < 7
+					return true if self.horizontal_check(x, y)
+				end
+				if y + 3 < 6
+					return true if self.vertical_check(x, y)
+				end
+				if x + 3 < 7 && y + 3 < 6
+					return true if self.diagonal_r2l_check(x, y)
+				end
+				if x - 3 >= 0 && y + 3 < 6
+					return true if self.diagonal_l2r_check(x, y)
+				end
+			end
+		end
+		return false
+	end
 
+	def horizontal_check(x, y)
+		is_winner = (0..3).inject(true) do |is_win, ind| 
+			is_win && board[y][x] == board[y][x+ind] && board[y][x+ind] != "."
+		end
+		return is_winner
+	end
 
+	def vertical_check(x, y)
+		is_winner = (0..3).inject(true) do |is_win, ind| 
+			is_win && board[y][x] == board[y+ind][x] && board[y+ind][x] != "."
+		end
+		return is_winner
+	end
 
+	def diagonal_r2l_check(x, y)
+		is_winner = (0..3).inject(true) do |is_win, ind| 
+			is_win && board[y][x] == board[y+ind][x+ind] && board[y+ind][x+ind] != "."
+		end
+		return is_winner
+	end
+
+	def diagonal_l2r_check(x, y)
+		is_winner = (0..3).inject(true) do |is_win, ind| 
+			is_win && board[y][x] == board[y+ind][x-ind] && board[y+ind][x-ind] != "."
+		end
+		return is_winner
 	end
 
 
 end
 
-game = ConnectFour.new
+# game = ConnectFour.new
 
-puts game.draw_board
+# puts game.draw_board
