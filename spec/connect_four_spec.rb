@@ -35,8 +35,8 @@ describe "ConnectFour" do
 														 		 4 => [".", ".", ".", ".", ".", ".", "."],
 														 		 5 => [".", ".", ".", ".", ".", ".", "."]}}
 
-	let(:empty_board_string) {". . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n"}
-	let(:full_board_string) {"O O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\n"}
+	let(:empty_board_string) {". . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n. . . . . . .\n1 2 3 4 5 6\n"}
+	let(:full_board_string) {"O O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\nO O O O O O O\n1 2 3 4 5 6\n"}
 
 	describe ".initialize" do
 		it "it sets up an empty board" do

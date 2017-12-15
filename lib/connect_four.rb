@@ -3,8 +3,10 @@ class ConnectFour
 
 
 	def initialize
-		# puts self.write_instructions
+		puts self.write_instructions
+		@is_human = true
 		@board = self.make_board
+		puts self.draw_board
 
 	end
 
@@ -20,8 +22,16 @@ class ConnectFour
 		instructions += "  A column\n"
 		instructions += "  Or diagonally\n"
 		instructions += "And you win!\n"
-		instructions += "Goodluck =)\n"
+		instructions += "Goodluck =)\n\n"
 		return instructions
+	end
+
+	def prompt_for_move
+
+		puts "Please enter the column number you want to play in"
+		move = gets.chomp.to_i
+		return move
+		
 	end
 
 	def check_coord(coord)
@@ -42,14 +52,24 @@ class ConnectFour
 	end
 
 
-	def make_move(coord)
+	def make_move(coord, human=true)
+		if human
+			piece = "X"
+		else
+			piece = "O"
+		end
+
 		i = 0
 		while i < 6
 			if @board[i][coord] == "."
-				@board[i][coord] == "X"
+				@board[i][coord] = piece
 				return [i, coord]
 			end
 			i += 1
+		end
+		if human
+			puts "That is not an acceptable move..."
+			puts "Try again"
 		end
 		return false
 
@@ -62,9 +82,18 @@ class ConnectFour
 			board += @board[i].join(" ") + "\n"
 			i -= 1
 		end
+		board += "1 2 3 4 5 6 7\n"
 		return board
 	end
 
+	def check_full_board
+
+		is_full = (0..6).inject(true) do |is_full, ind| 
+			is_full && !check_if_free(ind)
+		end
+		return is_full
+		
+	end
 
 	def check_for_win
 		(0..5).each do |y|
@@ -118,6 +147,43 @@ class ConnectFour
 
 end
 
-# game = ConnectFour.new
+game = ConnectFour.new
 
-# puts game.draw_board
+isOver = false
+
+while !game.check_for_win && !game.check_full_board
+
+	move = game.prompt_for_move
+
+	while game.make_move(move-1) == false
+		move = game.prompt_for_move
+	end
+
+	puts game.draw_board
+
+	if game.check_for_win
+		puts "You win! Congrats"
+		next
+	end
+
+	if game.check_full_board
+		puts "You lost =("
+		next
+	end
+
+	move = rand(6) + 1
+
+	while game.make_move(move-1, false) == false
+		move = rand(6) + 1
+	end
+
+	puts game.draw_board
+
+	if game.check_for_win || game.check_full_board
+		puts "You lost =("
+		next
+	end
+
+end
+
+
